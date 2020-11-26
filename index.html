@@ -463,6 +463,9 @@ names(messy_sheet)[1] &lt;- &quot;dept&quot;</code></pre>
 ## #   Psychology &lt;chr&gt;, `Science and Engineering` &lt;chr&gt;, Security &lt;chr&gt;, `Social
 ## #   Research` &lt;chr&gt;, Statistics &lt;chr&gt;, Tax &lt;chr&gt;, Veterinarian &lt;chr&gt;,
 ## #   Other &lt;chr&gt;, Unknown &lt;chr&gt;, Total &lt;chr&gt;</code></pre>
+</div>
+<div id="tidy-it-up-a-bit" class="section level2">
+<h2>Tidy it up a bit</h2>
 <p>Remove the margin totals in the spreadsheet and pivot longer:</p>
 <pre class="r"><code>tidy_sheet &lt;- messy_sheet %&gt;%
   filter(dept != &quot;All employees&quot;) %&gt;%
@@ -493,6 +496,9 @@ head(tidier_sheet)</code></pre>
 ## 4 Government Legal Department Legal                  9  
 ## 5 Government Legal Department Other                  8.5
 ## 6 Serious Fraud Office        Operational Delivery   9.1</code></pre>
+</div>
+<div id="make-a-picture" class="section level2">
+<h2>Make a picture</h2>
 <p>Let’s choose a few jobs from…</p>
 <pre class="r"><code>tidier_sheet$job %&gt;% unique()</code></pre>
 <pre><code>##  [1] &quot;Human Resources&quot;                     
@@ -523,6 +529,7 @@ head(tidier_sheet)</code></pre>
 ## [26] &quot;Social Research&quot;                     
 ## [27] &quot;Psychology&quot;                          
 ## [28] &quot;Inspector of Education and Training&quot;</code></pre>
+<p>The bigger the blob, the higher the percentage in that profession and dept.</p>
 <pre class="r"><code>tidier_sheet %&gt;%
   filter(job %in% c(&quot;Social Research&quot;, &quot;Economics&quot;, &quot;Statistics&quot;, &quot;Psychology&quot;)) %&gt;%
   ggplot(aes(x = job, y = reorder(dept, desc(dept)), colour = dept)) +

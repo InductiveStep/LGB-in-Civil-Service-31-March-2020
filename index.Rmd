@@ -30,6 +30,8 @@ names(messy_sheet)[1] <- "dept"
 head(messy_sheet)
 ```
 
+## Tidy it up a bit
+
 Remove the margin totals in the spreadsheet and pivot longer:
 
 ```{r}
@@ -50,13 +52,16 @@ tidier_sheet <- tidy_sheet %>%
 head(tidier_sheet)
 ```
 
+
+## Make a picture
+
 Let's choose a few jobs from...
 
 ```{r}
 tidier_sheet$job %>% unique()
 ```
 
-
+The bigger the blob, the higher the percentage in that profession and dept.
 
 ```{r fig.height=5, fig.width=9}
 tidier_sheet %>%
