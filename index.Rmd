@@ -65,13 +65,14 @@ The bigger the blob, the higher the percentage in that profession and dept.
 
 ```{r fig.height=5, fig.width=9}
 tidier_sheet %>%
-  filter(job %in% c("Social Research", "Economics", "Statistics", "Psychology")) %>%
+  filter(job %in% c("Social Research", "Economics", "Statistics")) %>%
   ggplot(aes(x = job, y = reorder(dept, desc(dept)), colour = dept)) +
   geom_point(aes(size = perc)) +
   theme(legend.position = "none") +
   labs(x = "Profession",
        y = NULL,
        title = "LGBO civil servants",
+       subtitle = "Blob size proportional to %",
        caption = "There are many reasons for missing blobs - see original spreadsheet") +
   scale_x_discrete(position = "top") 
 ```
