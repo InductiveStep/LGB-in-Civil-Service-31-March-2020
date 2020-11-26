@@ -1,0 +1,77 @@
+---
+title: "Civil servants by sexual orientation (by profession and department, 31 March 2020)"
+author: "Andi Fugard"
+date: "26/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Get the data
+
+It's linked [over here](https://www.gov.uk/government/statistics/civil-servants-by-sex-and-ethnicity-and-disability-and-sexual-orientation-by-profession-and-department-2020).
+
+```{r message=FALSE}
+library(readxl)
+library(tidyverse)
+localExcelTemp <- tempfile(fileext = ".xlsx")
+download.file("https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/938871/Civil_servants_by_sex_and_ethnicity_and_disability_and_sexual_orientation_by_profession_and_department__2020.xlsx",
+              destfile = localExcelTemp,
+              mode = "wb")
+messy_sheet <- read_xlsx(localExcelTemp,
+                         "Sexual Orientation",
+                         skip = 4) %>% na.omit()
+names(messy_sheet)[1] <- "dept"
+```
+
+```{r}
+head(messy_sheet)
+```
+
+Remove the margin totals in the spreadsheet and pivot longer:
+
+```{r}
+tidy_sheet <- messy_sheet %>%
+  filter(dept != "All employees") %>%
+  select(-Total) %>%
+  pivot_longer(cols = !"dept", names_to = "job", values_to = "prop")
+head(tidy_sheet)
+```
+
+Remove all the missingness, whatever the reason, and transform the proportions in E-notation to percentages.
+
+```{r}
+tidier_sheet <- tidy_sheet %>%
+  filter(!prop %in% c("..", "--", "-", "*")) %>%
+  mutate(perc = as.numeric(prop)*100) %>%
+  select(-prop)
+head(tidier_sheet)
+```
+
+Let's choose a few jobs from...
+
+```{r}
+tidier_sheet$job %>% unique()
+```
+
+
+
+```{r fig.height=5, fig.width=9}
+tidier_sheet %>%
+  filter(job %in% c("Social Research", "Economics", "Statistics", "Psychology")) %>%
+  ggplot(aes(x = job, y = reorder(dept, desc(dept)), colour = dept)) +
+  geom_point(aes(size = perc)) +
+  theme(legend.position = "none") +
+  labs(x = "Profession",
+       y = NULL,
+       title = "LGBO civil servants",
+       caption = "There are many reasons for missing blobs - see original spreadsheet") +
+  scale_x_discrete(position = "top") 
+```
+
+
+
+
+
