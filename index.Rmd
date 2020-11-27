@@ -32,6 +32,17 @@ head(messy_sheet)
 
 ## Tidy is a bit
 
+First record the dept names that have numbers due to footnote superscripts:
+
+```{r}
+messy_sheet <- messy_sheet %>%
+  mutate(dept = recode(dept, `Defence Electronics & Components Agency 7` = "Defence Electronics & Components Agency",
+         `Submarine Delivery Agency 8` = "Submarine Delivery Agency",
+         `Forestry and Land Scotland 9` = "Forestry and Land Scotland",
+         `Scottish Forestry 10` = "Scottish Forestry"))
+```
+
+
 
 ### Save the margins
 
