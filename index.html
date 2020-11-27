@@ -464,9 +464,9 @@ names(messy_sheet)[1] &lt;- &quot;dept&quot;</code></pre>
 ## #   Research` &lt;chr&gt;, Statistics &lt;chr&gt;, Tax &lt;chr&gt;, Veterinarian &lt;chr&gt;,
 ## #   Other &lt;chr&gt;, Unknown &lt;chr&gt;, Total &lt;chr&gt;</code></pre>
 </div>
-<div id="tidy-is-a-bit" class="section level2">
-<h2>Tidy is a bit</h2>
-<p>First record the dept names that have numbers due to footnote superscripts:</p>
+<div id="tidy-it-a-bit" class="section level2">
+<h2>Tidy it a bit</h2>
+<p>First recode the dept names that have numbers due to footnote superscripts:</p>
 <pre class="r"><code>messy_sheet &lt;- messy_sheet %&gt;%
   mutate(dept = recode(dept, `Defence Electronics &amp; Components Agency 7` = &quot;Defence Electronics &amp; Components Agency&quot;,
          `Submarine Delivery Agency 8` = &quot;Submarine Delivery Agency&quot;,

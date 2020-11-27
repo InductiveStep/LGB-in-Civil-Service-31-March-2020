@@ -30,9 +30,9 @@ names(messy_sheet)[1] <- "dept"
 head(messy_sheet)
 ```
 
-## Tidy is a bit
+## Tidy it a bit
 
-First record the dept names that have numbers due to footnote superscripts:
+First recode the dept names that have numbers due to footnote superscripts:
 
 ```{r}
 messy_sheet <- messy_sheet %>%
