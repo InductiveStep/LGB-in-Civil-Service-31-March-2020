@@ -119,7 +119,7 @@ dept_margins %>%
 job_margins %>%
   na.omit() %>%
   ggplot(aes(x = reorder(job, perc), y = perc)) +
-  geom_point(aes(colour = job)) +
+  geom_point(aes(colour = job), size = 2) +
   coord_flip() +
   labs(x = NULL, y = "%",
        title = "LGBO civil servants") +
