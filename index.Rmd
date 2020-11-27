@@ -30,7 +30,37 @@ names(messy_sheet)[1] <- "dept"
 head(messy_sheet)
 ```
 
-## Tidy it up a bit
+## Tidy is a bit
+
+
+### Save the margins
+
+Using `as.numeric` to zap anything which doesn't look like a number.
+
+```{r}
+dept_margins <- messy_sheet %>%
+  select(dept, Total) %>%
+  mutate(perc = as.numeric(Total)*100,
+         Total = NULL)
+dept_margins
+```
+
+
+
+```{r}
+job_margins <- messy_sheet %>%
+  filter(dept == "All employees") %>%
+  select(-c(dept, Total)) %>%
+  t() %>%
+  as.data.frame() %>%
+  rename(prop = V1) %>%
+  mutate(job = rownames(.),
+         perc = as.numeric(prop) * 100,
+         prop = NULL)
+job_margins
+```
+
+### Tidy up the rest
 
 Remove the margin totals in the spreadsheet and pivot longer:
 
@@ -53,19 +83,47 @@ head(tidier_sheet)
 ```
 
 
-## Make a picture
+## Make some pictures
 
-Let's choose a few jobs from...
 
-```{r}
-tidier_sheet$job %>% unique()
+### Departments
+
+```{r fig.height=12, fig.width=7}
+dept_margins %>%
+  na.omit() %>%
+  ggplot(aes(x = reorder(dept, perc), y = perc)) +
+  geom_point(aes(colour = dept), size = 2) +
+  coord_flip() +
+  labs(x = NULL, y = "%",
+       title = "LGBO civil servants") +
+  ylim(0,20) +
+  theme(legend.position = "none")
 ```
 
-The bigger the blob, the higher the percentage in that profession and dept.
 
-```{r fig.height=5, fig.width=9}
+
+### Professions
+
+```{r fig.height=6, fig.width=6}
+job_margins %>%
+  na.omit() %>%
+  ggplot(aes(x = reorder(job, perc), y = perc)) +
+  geom_point(aes(colour = job)) +
+  coord_flip() +
+  labs(x = NULL, y = "%",
+       title = "LGBO civil servants") +
+  ylim(0,20) +
+  theme(legend.position = "none")
+```
+
+
+### Look within depts and professions
+
+Let's choose a few jobs from the list. The bigger the blob, the higher the percentage in that profession and dept.
+
+```{r fig.height=6, fig.width=9}
 tidier_sheet %>%
-  filter(job %in% c("Social Research", "Economics", "Statistics")) %>%
+  filter(job %in% c("Social Research", "Economics", "Statistics", "Policy")) %>%
   ggplot(aes(x = job, y = reorder(dept, desc(dept)), colour = dept)) +
   geom_point(aes(size = perc)) +
   theme(legend.position = "none") +
